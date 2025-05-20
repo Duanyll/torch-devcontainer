@@ -32,11 +32,17 @@ ENV UV_LINK_MODE=copy
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 RUN uv python install ${PYTHON_VERSION}
 
+# Install starship prompt
+RUN curl -sS https://starship.rs/install.sh | sh -s -- --yes && \
+    echo 'eval "$(starship init bash)"' >> /home/${USER_NAME}/.bashrc
+
 # Configure runtime environments
 ARG HUGGINGFACE_MIRROR=https://hf-mirror.com
 ENV HF_ENDPOINT=${HUGGINGFACE_MIRROR}
 
 # Optional environment variables
+# Allow nvenc capabilities for ffmpeg
+ENV NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
 # Disable NCCL P2P and IB to avoid issues with consumer-grade GPUs
 # ENV NCCL_P2P_DISABLE=1 NCCL_IB_DISABLE=1
 # Fine-tune the number of threads for OMP
@@ -47,3 +53,5 @@ RUN mkdir -p /home/${USER_NAME}/.cache/huggingface && \
     mkdir -p /home/${USER_NAME}/.cache/uv && \
     mkdir -p /home/${USER_NAME}/.cache/torch/hub
 VOLUME ["/home/${USER_NAME}/.cache/huggingface", "/home/${USER_NAME}/.cache/uv", "/home/${USER_NAME}/.cache/torch/hub"]
+
+ENTRYPOINT [ "/bin/bash" ]
