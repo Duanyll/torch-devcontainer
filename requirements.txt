@@ -1,6 +1,0 @@
-# You can generate this file with pipreqs
-
-einops
-opencv_python
-ipykernel
-ipywidgets

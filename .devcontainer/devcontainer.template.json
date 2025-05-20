@@ -1,0 +1,39 @@
+{
+    "image": "%BUILT_IMAGE%",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.autopep8",
+                "KevinRose.vsc-python-indent",
+                "Rubymaniac.vscode-paste-and-indent",
+                "ms-vscode.cmake-tools",
+                "ms-vscode.cpptools",
+                "GitHub.copilot",
+                "ms-vscode.hexeditor",
+                "ms-toolsai.jupyter",
+                "ms-toolsai.tensorboard"
+            ]
+        }
+    },
+    "capAdd": [
+        "SYS_PTRACE"
+    ],
+    "runArgs": [
+        "--add-host=host.docker.internal:host-gateway",
+        "--gpus",
+        "%GPU_FLAGS%",
+        "--shm-size=%SHM_SIZE%"
+    ],
+    "remoteUser": "%USER_NAME%",
+    "mounts": [
+        "type=bind,src=/home/%USER_NAME%/.cache/huggingface/,dst=/home/%USER_NAME%/.cache/huggingface/",
+        "type=bind,src=/home/%USER_NAME%/.cache/uv/,dst=/home/%USER_NAME%/.cache/uv/",
+        "type=bind,src=/home/%USER_NAME%/.cache/torch/hub/,dst=/home/%USER_NAME%/.cache/torch/hub/"
+    ],
+    "shutdownAction": "none",
+    "hostRequirements": {
+        "gpu": true
+    },
+    "updateContentCommand": "uv sync"
+}
