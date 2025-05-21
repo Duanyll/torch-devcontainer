@@ -5,12 +5,25 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "ipykernel>=6.29.5",
-    "nbstripout>=0.8.1",
     "opencv-python>=4.11.0.86",
     "torch>=2.7.0",
     "torchvision>=0.22.0",
 ]
+
+[dependency-groups]
+dev = [
+    "cmake>=3.26",
+    "ipykernel>=6.29.5",
+    "nbstripout>=0.8.1",
+    "ninja>=1.11.1.4",
+]
+
+[build-system]
+requires = [
+    "scikit-build-core",
+    "torch>=2.7.0",
+]
+build-backend = "scikit_build_core.build"
 
 [tool.uv.sources]
 torch = [
@@ -28,3 +41,9 @@ default = true
 name = "pytorch-cu128"
 url = "https://download.pytorch.org/whl/cu128"
 explicit = true
+
+[tool.scikit-build]
+wheel.packages = [ "example" ]
+
+[tool.scikit-build.cmake.define]
+TORCH_CUDA_ARCH_LIST = "8.6"

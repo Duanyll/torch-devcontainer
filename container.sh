@@ -139,6 +139,9 @@ DEV_CONTAINER_JSON=".devcontainer/devcontainer.json"
 # Get the repository directory name
 REPO_DIR=$(basename "$(pwd)")
 
+# Get python version from .python-version file
+PYTHON_VERSION=$(cat .python-version)
+
 # Ensure cache directories exist with correct permissions
 mkdir -p ~/.cache/huggingface
 mkdir -p ~/.cache/uv
@@ -156,6 +159,7 @@ if [ "$COMMAND" = "setup" ]; then
         --build-arg USER_UID=$USER_UID \
         --build-arg USER_GID=$USER_GID \
         --build-arg PYPI_MIRROR=$PYPI_MIRROR \
+        --build-arg PYTHON_VERSION=$PYTHON_VERSION \
         --build-arg HUGGINGFACE_MIRROR=$HUGGINGFACE_MIRROR \
         -t $IMAGE_TAG \
         -f $DOCKER_FILE_PATH .devcontainer

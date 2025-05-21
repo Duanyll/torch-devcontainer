@@ -4,16 +4,17 @@
         "vscode": {
             "extensions": [
                 "ms-python.python",
-                "ms-python.autopep8",
-                "KevinRose.vsc-python-indent",
-                "Rubymaniac.vscode-paste-and-indent",
                 "ms-vscode.cmake-tools",
                 "ms-vscode.cpptools",
                 "GitHub.copilot",
                 "ms-vscode.hexeditor",
                 "ms-toolsai.jupyter",
-                "ms-toolsai.tensorboard"
-            ]
+                "tamasfe.even-better-toml",
+                "charliermarsh.ruff"
+            ],
+            "settings": {
+                "C_Cpp.intelliSenseEngine": "default"
+            }
         }
     },
     "capAdd": [
@@ -35,5 +36,5 @@
     "hostRequirements": {
         "gpu": true
     },
-    "updateContentCommand": "uv sync"
+    "updateContentCommand": "uv sync --dev --no-install-project"
 }
