@@ -47,3 +47,4 @@ wheel.packages = [ "example" ]
 
 [tool.scikit-build.cmake.define]
 TORCH_CUDA_ARCH_LIST = "8.6"
+MODULE_DIR = "example"

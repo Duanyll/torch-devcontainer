@@ -1,22 +1,45 @@
 cmake_minimum_required(VERSION 3.26)
 
+if (WIN32)
+  # Workaround for VSCode CMake Tools on Windows does not activate pyhton venv
+  # Manually add .venv/Scripts to PATH
+  if (EXISTS "${CMAKE_SOURCE_DIR}/.venv/Scripts")
+    set(ENV{PATH} "${CMAKE_SOURCE_DIR}/.venv/Scripts;$ENV{PATH}")
+    unset(ENV{PYTHONHOME} CACHE)
+    message(STATUS "Activated Python venv from .venv/Scripts")
+  endif()
+
+  if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message(WARNING "Debug mode may not work with PyTorch on Windows. Consider using Release mode.")
+  endif()
+endif()
+
 message("Build type: ${CMAKE_BUILD_TYPE}")
 
-set(MODULE_DIR "example")
+file(READ "${CMAKE_SOURCE_DIR}/pyproject.toml" PYPROJECT_CONTENTS)
+function (parse_pyproject key)
+  string(REGEX MATCH "${key} = \"([^\"]+)\"" _match "${PYPROJECT_CONTENTS}")
+  if (_match)
+    string(REGEX REPLACE "${key} = \"([^\"]+)\"" "\\1" value "${_match}")
+    message(STATUS "Found ${key} in pyproject.toml: ${value}")
+    set(${key} "${value}" PARENT_SCOPE)
+  else()
+    message(FATAL_ERROR "${key} not found in pyproject.toml")
+  endif()
+endfunction()
 
 if (NOT TORCH_CUDA_ARCH_LIST)
-    set(TORCH_CUDA_ARCH_LIST "8.6")
+  parse_pyproject(TORCH_CUDA_ARCH_LIST)
+endif()
+
+if (NOT MODULE_DIR)
+  parse_pyproject(MODULE_DIR)
 endif()
 
 set (CMAKE_CXX_STANDARD 17)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (CMAKE_CUDA_STANDARD 17)
 set (CMAKE_CUDA_STANDARD_REQUIRED ON)
-
-if (MSVC)
-  # suppress C4624 for PyTorch header files
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4624")
-endif()
 
 project(ops LANGUAGES C CXX CUDA)
 
@@ -44,6 +67,9 @@ file(GLOB_RECURSE SRC_FILES
 add_library(ops SHARED ${SRC_FILES})
 target_link_libraries(ops ${Python_LIBRARIES} ${TORCH_LIBRARIES} ${TORCH_PYTHON_LIBRARY})
 target_compile_definitions(ops PRIVATE TORCH_EXTENSION_NAME=libops)
+if (MSVC)
+  target_compile_options(ops PRIVATE $<$<COMPILE_LANGUAGE:CXX>:/wd4264> $<$<COMPILE_LANGUAGE:CXX>:/wd4267>)
+endif()
 
 install(TARGETS ops LIBRARY DESTINATION ${MODULE_DIR})
 

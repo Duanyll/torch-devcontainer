@@ -1,10 +1,9 @@
+import os
+import sys
 import torch
 
 
 def check_debugger():
-    import os
-    import sys
-    
     has_trace = hasattr(sys, 'gettrace') and sys.gettrace() is not None
     has_breakpoint = sys.breakpointhook.__module__ != "sys"
     is_debug = has_trace or has_breakpoint
@@ -25,7 +24,8 @@ def check_cuda():
         print("Current device:", torch.cuda.current_device())
         print("Device name:", torch.cuda.get_device_name(torch.cuda.current_device()))
     else:
-        print("CUDA is not available. Using CPU.")
+        print("CUDA is not available.")
+        sys.exit(1)
 
 
 def test_custom_ops():
