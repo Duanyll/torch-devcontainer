@@ -69,12 +69,6 @@ scoop install uv
 
 This template uses [uv](https://astral.sh/uv/) for Python package management, which is a modern alternative to `pip` and `pipx`. It provides a more consistent and reliable way to manage Python packages across different environments. `pip` is not present in the container, so you should use `uv` instead.
 
-To restore the Python environment, run the following command:
-
-```bash
-uv sync --dev --no-install-project
-```
-
 To add new packages, use:
 
 ```bash
@@ -83,7 +77,7 @@ uv add <package_name>
 
 See the `pyproject.toml` file to understand how `uv` treat PyTorch installation with specific CUDA version. 
 
-Try to run every python command with `uv run` instead of calling `python` directly, to let `uv` ensures a reliable environment for you. For example, to run a Python script, use:
+Try to run every python command with `uv run` instead of calling `python` directly. `uv` will make sure everything is installed before running your code. For example, to run a Python script, use:
 
 ```bash
 uv run script.py
@@ -94,6 +88,8 @@ uv run script.py
 Development of C++/CUDA extensions is supported in this template. It works with the Visual Studio [CMake Tools extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools) out of the box. You can condfigure and build C++/CUDA extensions with all default options in its GUI dashboard, or use the command line:
 
 ```bash
+uv sync --dev --no-install-project
+./venv/Scripts/activate
 cmake -S . -B build -G "Ninja"
 cmake --build build
 ```

@@ -57,5 +57,3 @@ RUN mkdir -p /home/${USER_NAME}/.cache/huggingface && \
     mkdir -p /home/${USER_NAME}/.cache/uv && \
     mkdir -p /home/${USER_NAME}/.cache/torch/hub
 VOLUME ["/home/${USER_NAME}/.cache/huggingface", "/home/${USER_NAME}/.cache/uv", "/home/${USER_NAME}/.cache/torch/hub"]
-
-ENTRYPOINT [ "/bin/bash" ]
