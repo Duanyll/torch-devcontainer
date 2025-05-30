@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "ms-python.python",
+        "ms-vscode.cmake-tools",
+        "ms-vscode.cpptools",
+        "GitHub.copilot",
+        "ms-vscode.hexeditor",
+        "ms-toolsai.jupyter",
+        "tamasfe.even-better-toml",
+        "charliermarsh.ruff"
+    ]
+}
