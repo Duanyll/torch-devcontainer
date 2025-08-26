@@ -10,21 +10,6 @@ dependencies = [
     "torchvision>=0.22.0",
 ]
 
-[dependency-groups]
-dev = [
-    "cmake>=3.26",
-    "ipykernel>=6.29.5",
-    "nbstripout>=0.8.1",
-    "ninja>=1.11.1.4",
-]
-
-[build-system]
-requires = [
-    "scikit-build-core",
-    "torch>=2.7.0",
-]
-build-backend = "scikit_build_core.build"
-
 [tool.uv.sources]
 torch = [
   { index = "pytorch", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
@@ -47,10 +32,3 @@ default = true
 name = "pytorch"
 url = "https://download.pytorch.org/whl/cu128"
 explicit = true
-
-[tool.scikit-build]
-wheel.packages = [ "example" ]
-
-[tool.scikit-build.cmake.define]
-TORCH_CUDA_ARCH_LIST = "8.6"
-MODULE_DIR = "example"

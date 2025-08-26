@@ -1,8 +1,6 @@
 {
-    "cmake.generator": "Ninja",
     "python.analysis.typeCheckingMode": "basic",
     "python.analysis.diagnosticSeverityOverrides": {
         "reportPrivateImportUsage": "none",
     },
-    "C_Cpp.intelliSenseEngine": "default"
 }
