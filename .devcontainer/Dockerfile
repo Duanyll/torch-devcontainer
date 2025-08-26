@@ -10,7 +10,7 @@ ARG UBUNTU_MIRROR=https://mirrors.bfsu.edu.cn/ubuntu/
 RUN sed -i "s|http://archive.ubuntu.com/ubuntu/|$UBUNTU_MIRROR|g" /etc/apt/sources.list && \
     sed -i "s|http://security.ubuntu.com/ubuntu/|$UBUNTU_MIRROR|g" /etc/apt/sources.list
 RUN apt-get update -y && \
-    apt-get -y install --no-install-recommends curl tree wget ca-certificates unzip bzip2 xz-utils zip nano vim-tiny less jq lsb-release apt-transport-https sudo tmux ffmpeg libsm6 libxext6 libxrender-dev libssl3 git gdb && \
+    apt-get -y install --no-install-recommends curl tree wget ca-certificates unzip bzip2 xz-utils zip nano vim-tiny less jq lsb-release apt-transport-https sudo tmux ffmpeg libsm6 libxext6 libxrender-dev libssl3 git gdb rsync aria2 && \
     apt-get -y clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -25,12 +25,10 @@ USER ${USER_NAME}
 
 # Install the uv package manager for the user
 ARG PYPI_MIRROR=https://mirrors.aliyun.com/pypi/simple/
-ARG PYTHON_VERSION=3.13
 ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 ENV UV_DEFAULT_INDEX=${PYPI_MIRROR}
 ENV UV_LINK_MODE=copy
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-RUN uv python install ${PYTHON_VERSION}
 
 # Install starship prompt
 RUN curl -sS https://starship.rs/install.sh | sh -s -- --yes && \
@@ -43,6 +41,7 @@ RUN uv tool install cmake --no-cache && \
 # Configure runtime environments
 ARG HUGGINGFACE_MIRROR=https://hf-mirror.com
 ENV HF_ENDPOINT=${HUGGINGFACE_MIRROR}
+ENV HF_HUB_DISABLE_XET=1
 
 # Optional environment variables
 # Allow nvenc capabilities for ffmpeg
@@ -56,4 +55,4 @@ ENV NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
 RUN mkdir -p /home/${USER_NAME}/.cache/huggingface && \
     mkdir -p /home/${USER_NAME}/.cache/uv && \
     mkdir -p /home/${USER_NAME}/.cache/torch/hub
-VOLUME ["/home/${USER_NAME}/.cache/huggingface", "/home/${USER_NAME}/.cache/uv", "/home/${USER_NAME}/.cache/torch/hub"]
+VOLUME ["/home/${USER_NAME}/.cache/huggingface", "/home/${USER_NAME}/.cache/uv", "/home/${USER_NAME}/.cache/torch/hub", "/home/${USER_NAME}/.local/share/uv"]

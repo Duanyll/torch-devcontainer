@@ -1,0 +1,39 @@
+services:
+  devcontainer:
+    image: uv-devcontainer:cu${CUDA_VERSION:-12.9.0}-${USER_NAME:?}
+    build: 
+      context: .devcontainer
+      args:
+        CUDA_VERSION: "${CUDA_VERSION:?}"
+        USER_NAME: "${USER_NAME:?}"
+        USER_UID: "${USER_UID:-1000}"
+        USER_GID: "${USER_GID:-1000}"
+        
+        UBUNTU_MIRROR: "${UBUNTU_MIRROR:-https://mirrors.bfsu.edu.cn/ubuntu/}"
+        PYPI_MIRROR: "${PYPI_MIRROR:-https://mirrors.aliyun.com/pypi/simple/}"
+        HUGGINGFACE_MIRROR: "${HUGGINGFACE_MIRROR:-https://hf-mirror.com}"
+
+    user: ${USER_NAME}
+    cap_add:
+      - SYS_PTRACE
+    shm_size: ${SHM_SIZE:-32g}
+    command: [ "tail", "-f", "/dev/null" ]
+    working_dir: /workspace/${REPO_NAME:?}
+
+    volumes:
+      - "/home/${USER_NAME}/.cache/huggingface/:/home/${USER_NAME}/.cache/huggingface/"
+      - "/home/${USER_NAME}/.cache/uv/:/home/${USER_NAME}/.cache/uv/"
+      - "/home/${USER_NAME}/.cache/torch/hub/:/home/${USER_NAME}/.cache/torch/hub/"
+      - "/home/${USER_NAME}/.local/share/uv/:/home/${USER_NAME}/.local/share/uv/"
+      - ".:/workspace/${REPO_NAME:?}"
+
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES:-all}
+
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: "all"
+              capabilities: [gpu]

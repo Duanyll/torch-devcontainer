@@ -1,5 +1,9 @@
 {
-    "image": "%BUILT_IMAGE%",
+    "dockerComposeFile": [
+        "../docker-compose.yml",
+        "./docker-compose.extend.yml"
+    ],
+    "service": "devcontainer",
     "customizations": {
         "vscode": {
             "extensions": [
@@ -17,21 +21,7 @@
             }
         }
     },
-    "capAdd": [
-        "SYS_PTRACE"
-    ],
-    "runArgs": [
-        "--add-host=host.docker.internal:host-gateway",
-        "--gpus",
-        "%GPU_FLAGS%",
-        "--shm-size=%SHM_SIZE%"
-    ],
-    "remoteUser": "%USER_NAME%",
-    "mounts": [
-        "type=bind,src=/home/%USER_NAME%/.cache/huggingface/,dst=/home/%USER_NAME%/.cache/huggingface/",
-        "type=bind,src=/home/%USER_NAME%/.cache/uv/,dst=/home/%USER_NAME%/.cache/uv/",
-        "type=bind,src=/home/%USER_NAME%/.cache/torch/hub/,dst=/home/%USER_NAME%/.cache/torch/hub/"
-    ],
+    "workspaceFolder": "/workspace/${localWorkspaceFolderBasename}",
     "shutdownAction": "none",
     "hostRequirements": {
         "gpu": true
