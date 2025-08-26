@@ -3,7 +3,6 @@
 A modern project template for PyTorch CUDA projects, designed to streamline the setup and management of development environments. Benefits include:
 
 - **Consistent Development Environment**: Use `uv` and Docker to ensure reproducible environments across different platforms (Linux, Windows, WSL).
-- **Easy Container Management**: Use `container.sh` to build and run Docker containers with a consistent setup, faster than standard Dev Containers.
 - **Visual Studio Code Integration**: Seamlessly integrate with Visual Studio Code for environment creation, intellisense, and debugging.
 - **User-Permission Mounting and Caching**: Match user permissions with the host system, and cache Python packages to save bandwidth and speed up builds.
 
@@ -28,7 +27,7 @@ This template is designed to maintain a consistent development environment with 
 Make sure you have Docker and `nvidia-container-toolkit` installed on your system.
 
 1. Install the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) in Visual Studio Code.
-2. Run `bash container.sh setup` in the terminal to build the Docker image and create actual configuration files for dev container.
+2. Run `./setup_env.sh` in the terminal to build the Docker image and create actual configuration files for dev container.
 3. Open the command palette (Ctrl+Shift+P) and select `Dev Containers: Reopen in Container`.
 4. Wait for the container to build and start. You should now be inside the development container.
 
@@ -36,18 +35,12 @@ Make sure you have Docker and `nvidia-container-toolkit` installed on your syste
 
 Make sure you have Docker and `nvidia-container-toolkit` installed on your system.
 
-1. Run `bash container.sh setup` in the terminal to build the Docker image.
+1. Run `./setup_env.sh` in the terminal to build the Docker image.
 2. You can now run the container with the command:
    ```bash
-   bash container.sh <command>
+   docker compose up -d
+   docker compose exec devcontainer bash
    ```
-   Replace `<command>` with the command you want to run inside the container, such as `bash` to start a shell session. Or to run Python module:
-   ```bash
-   bash container.sh uv run -m example
-   ```
-   The container is created with `--rm -it` options, so it will be removed after you exit the container.
-
-The container created by `container.sh` tries to keep same environment as the one created by Visual Studio Code Dev Containers extension.
 
 ### Without Docker
 

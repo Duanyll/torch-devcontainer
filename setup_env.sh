@@ -114,6 +114,8 @@ EOL
 echo
 echo ".env 文件已成功创建！"
 
+mkdir -p ~/.cache/huggingface ~/.cache/uv ~/.cache/torch/hub/ ~/.local/share/uv/
+
 # --- 询问用户是否要立即构建 Docker 镜像 ---
 echo
 read -p "您想现在就执行 'docker compose build' 来构建镜像吗？ (y/N): " -n 1 -r
